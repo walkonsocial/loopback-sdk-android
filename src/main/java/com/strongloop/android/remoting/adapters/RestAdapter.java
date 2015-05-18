@@ -191,6 +191,52 @@ public class RestAdapter extends Adapter {
         request(path, verb, combinedParameters, parameterEncoding, httpHandler);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalStateException if the contract is not set
+     * (see {@link #setContract(RestContract)})
+     * or the adapter is not connected.
+     */
+    @Override
+    public void invokeRelationMethod(String method,
+                                     Map<String, ? extends Object> instanceParameters,
+                                     Map<String, ? extends Object> parameters,
+                                     final Callback callback) {
+        AsyncHttpResponseHandler httpHandler = new CallbackHandler(callback);
+        invokeRelationMethod(method, instanceParameters, parameters, httpHandler);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalStateException if the contract is not set
+     * (see {@link #setContract(RestContract)})
+     * or the adapter is not connected.
+     */
+    @Override
+    public void invokeRelationMethod(String method,
+                                     Map<String, ? extends Object> instanceParameters,
+                                     Map<String, ? extends Object> parameters,
+                                     final BinaryCallback callback) {
+        AsyncHttpResponseHandler httpHandler = new BinaryHandler(callback);
+        invokeRelationMethod(method, instanceParameters, parameters, httpHandler);
+    };
+
+    private void invokeRelationMethod(String method,
+                                      Map<String, ? extends Object> instanceParameters,
+                                      Map<String, ? extends Object> parameters,
+                                      AsyncHttpResponseHandler httpHandler) {
+        if (contract == null) {
+            throw new IllegalStateException("Invalid contract");
+        }
+        String verb = contract.getVerbForMethod(method);
+        String path = contract.getUrlForMethod(method, instanceParameters);
+        ParameterEncoding parameterEncoding = contract.getParameterEncodingForMethod(method);
+
+        request(path, verb, parameters, parameterEncoding, httpHandler);
+    }
+
     private void request(String path,
                          String verb,
                          Map<String, ? extends Object> parameters,

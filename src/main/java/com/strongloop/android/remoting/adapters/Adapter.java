@@ -252,4 +252,50 @@ public abstract class Adapter {
                 getClass().getName() + " does not support binary responses.");
     }
 
+
+    /**
+     * Invokes a remotable method exposed within a prototype on the server.
+     * <p>
+     * This should be thought of as a two-step process. First, the server loads
+     * or creates an object with the appropriate type. Then and only then is
+     * the method invoked on that object. The two parameter dictionaries
+     * correspond to these two steps: `creationParameters` for the former, and
+     * `parameters` for the latter.
+     *
+     * @param method The method to invoke, e.g.
+     * 		<code>"MyClass.prototype.__get__relatedModel"</code>.
+     * @param instanceParameters The parameters the virtual object should be
+     * created with.
+     * @param parameters The parameters to invoke with.
+     * @param callback The callback to invoke when the execution finishes.
+     */
+    public abstract void invokeRelationMethod(String method,
+                                              Map<String, ? extends Object> instanceParameters,
+                                              Map<String, ? extends Object> parameters, Callback callback);
+
+    /**
+     * Invokes a remotable method exposed within a prototype on the server,
+     * parses the response as binary data.
+     * <p>
+     * This should be thought of as a two-step process. First, the server loads
+     * or creates an object with the appropriate type. Then and only then is
+     * the method invoked on that object. The two parameter dictionaries
+     * correspond to these two steps: `creationParameters` for the former, and
+     * `parameters` for the latter.
+     *
+     * @param method The method to invoke, e.g.
+     * 		<code>"MyClass.prototype.__get__relatedModel"</code>.
+     * @param instanceParameters The parameters the virtual object should be
+     * created with.
+     * @param parameters The parameters to invoke with.
+     * @param callback The callback to invoke when the execution finishes.
+     */
+    public void invokeRelationMethod(String method,
+                                     Map<String, ? extends Object> instanceParameters,
+                                     Map<String, ? extends Object> parameters,
+                                     BinaryCallback callback) {
+        throw new UnsupportedOperationException(
+                getClass().getName() + " does not support binary responses.");
+    }
+
 }
